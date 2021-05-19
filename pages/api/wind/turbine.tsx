@@ -1,6 +1,5 @@
 import { either } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/pipeable';
-import { createAsset } from '../../../server/assetsView';
 import { WindTurbine, WindTurbineType } from '../../../server/types/storage';
 
 export default async function handler(req: any, res: any) {
@@ -32,12 +31,12 @@ export default async function handler(req: any, res: any) {
         }
       )
     );
-    if (validate) {
-      await createAsset(validate);
-      res.status(200).json({ name: 'Succesfull post of data' });
-    } else {
-      res.status(500).json({ name: 'Unable to Process Data' });
-    }
+    // if (validate) {
+    //   await createAsset(validate);
+    //   res.status(200).json({ name: 'Succesfull post of data' });
+    // } else {
+    //   res.status(500).json({ name: 'Unable to Process Data' });
+    // }
   } else {
     res.status(200).json({ user: 'Hello World' });
   }

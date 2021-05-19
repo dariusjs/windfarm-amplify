@@ -1,40 +1,32 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.execute = void 0;
-const aws_sdk_1 = __importDefault(require("aws-sdk"));
-let documentClient = new aws_sdk_1.default.DynamoDB.DocumentClient({
+exports.execute = exports.documentClientPut = exports.query = void 0;
+const client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
+const lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
+const client = new client_dynamodb_1.DynamoDBClient({
     credentials: {
-        accessKeyId: '1234',
-        secretAccessKey: '1234'
+        accessKeyId: Math.random().toString(),
+        secretAccessKey: Math.random().toString() // Only for Demo purposes these should come from a safe place and not from a static config file
     },
-    region: 'eu-west-1',
-    endpoint: 'http://localhost:8000',
-    convertEmptyValues: true
+    region: 'eu-west-1'
+    // endpoint: 'http://localhost:8000'
 });
-async function execute(getItemInput) {
-    const data = await executeQuery(documentClient, getItemInput);
-    return data;
-}
-exports.execute = execute;
-async function executeQuery(documentClient, getItemInput) {
+const ddbDocClient = lib_dynamodb_1.DynamoDBDocumentClient.from(client);
+async function query(queryInput) {
     try {
-        const params = Object.assign({}, getItemInput);
-        console.log(JSON.stringify(params, null, 2));
-        const results = [];
-        let items;
-        do {
-            items = await documentClient.query(getItemInput).promise();
-            if (items.Items) {
-                items.Items.forEach((item) => results.push(item));
-                params.ExclusiveStartKey = items.LastEvaluatedKey;
-            }
-        } while (typeof items.LastEvaluatedKey !== 'undefined');
-        console.log(JSON.stringify(results, null, 2));
-        // const getItemOutput = await documentClient.query(getItemInput).promise();
-        console.info('GetItem executed successfully.');
+        return await ddbDocClient.send(new lib_dynamodb_1.QueryCommand(queryInput));
+    }
+    catch (err) {
+        console.log(err);
+        handleGetItemError(err);
+        return err;
+    }
+}
+exports.query = query;
+async function documentClientPut(putInput) {
+    console.log(putInput);
+    try {
+        const results = await ddbDocClient.send(new lib_dynamodb_1.PutCommand(putInput));
         return results;
     }
     catch (err) {
@@ -43,6 +35,12 @@ async function executeQuery(documentClient, getItemInput) {
         return err;
     }
 }
+exports.documentClientPut = documentClientPut;
+async function execute(queryInput) {
+    const data = await query(queryInput);
+    return data;
+}
+exports.execute = execute;
 function handleGetItemError(err) {
     if (!err) {
         console.error('Encountered error object was empty');

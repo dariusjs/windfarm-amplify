@@ -19,8 +19,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TurbineReadings = exports.WindFarm = exports.WindFarmVariation = exports.WindTurbine = void 0;
 const t = __importStar(require("io-ts"));
-const WindTurbine = t.type({
+exports.WindTurbine = t.type({
     pk: t.string,
     sk: t.string,
     manufacturer: t.string,
@@ -31,20 +32,29 @@ const WindTurbine = t.type({
     gsi1sk1: t.string,
     windfarm: t.string
 });
-const WindFarm = t.type({
+var WindFarmVariation;
+(function (WindFarmVariation) {
+    WindFarmVariation["Land"] = "land";
+    WindFarmVariation["OffShore"] = "offshore";
+})(WindFarmVariation = exports.WindFarmVariation || (exports.WindFarmVariation = {}));
+const WindFarmTypeV = t.keyof({
+    [WindFarmVariation.Land]: null,
+    [WindFarmVariation.OffShore]: null
+});
+exports.WindFarm = t.type({
     pk: t.string,
     sk: t.string,
-    kWOut: t.string,
+    kWOut: t.number,
     manufacturer: t.string,
-    type: t.string,
+    type: WindFarmTypeV,
     gsi1pk1: t.string,
     gsi1sk1: t.string,
     windfarm: t.string
 });
-const TurbineReadings = t.type({
+exports.TurbineReadings = t.type({
     pk: t.string,
     sk: t.string,
     date: t.string,
-    kWOut: t.string,
-    wind: t.string
+    kWOut: t.number,
+    wind: t.number
 });

@@ -3,7 +3,7 @@ import Table from '../components/Table';
 import React, { useEffect, useMemo, useState } from 'react';
 import { TurbineReadingsType } from '../server/types/storage';
 
-function Readings({ windTurbine }) {
+function Readings({ windTurbine }: any) {
   const columns = useMemo(
     () => [
       {
@@ -50,7 +50,7 @@ function Readings({ windTurbine }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query }: any) {
   const pk = query.turbine;
 
   const windTurbine = await windTurbineReadingsQuery(pk);

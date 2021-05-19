@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTable } from 'react-table';
 
-export default function Table({ columns, data }) {
+export default function Table({ columns, data }: any) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
     data

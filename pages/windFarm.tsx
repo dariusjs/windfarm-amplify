@@ -5,7 +5,7 @@ import { WindFarmType } from '../server/types/storage';
 import { windFarm, value } from '../server/types/api';
 import Link from 'next/link';
 
-function WindTurbine({ windFarm }: windFarm) {
+function WindTurbine({ windFarm }: any) {
   const columns = React.useMemo(
     () => [
       {

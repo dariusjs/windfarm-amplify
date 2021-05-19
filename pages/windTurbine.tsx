@@ -5,7 +5,7 @@ import { WindTurbineType } from '../server/types/storage';
 import Link from 'next/link';
 import { windTurbine, value } from '../server/types/api';
 
-function WindTurbine({ windTurbine }: windTurbine) {
+function WindTurbine({ windTurbine }: any) {
   const columns = useMemo(
     () => [
       {
@@ -55,7 +55,7 @@ function WindTurbine({ windTurbine }: windTurbine) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query }: any) {
   const sk = query.windfarm;
 
   const windTurbine = await windTurbineQuery(sk);
